@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/predict";
+const API_URL = "https://web-production-97aaa.up.railway.app/predict";
 const HISTORY_KEY = "bhava_history";
 const MAX_HISTORY = 12;
 
