@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+uploads/
+dataset/
+
+Note.txt
+
+backend/uploads/
+notebooks/**/model*.h5

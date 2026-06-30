@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhāva · Navarasa Emotion Recognition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Yatra+One&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="arch-glow" aria-hidden="true"></div>
+
+<header class="site-head">
+  <p class="eyebrow">Bharatanatyam Emotion Recognition</p>
+  <h1 class="wordmark">Bh<span>ā</span>va</h1>
+  <p class="tagline">From bh&#257;va to rasa &mdash; reading the nine emotions of classical dance in a single frame.</p>
+</header>
+
+<main class="stage">
+
+  <!-- LEFT: Upload -->
+  <section class="panel upload-panel" aria-labelledby="upload-heading">
+    <h2 id="upload-heading" class="panel-title">Offer an image</h2>
+
+    <div class="mode-toggle" role="tablist" aria-label="Input mode">
+      <button type="button" class="mode-btn is-active" id="modeImageBtn" role="tab" aria-selected="true">Image</button>
+      <button type="button" class="mode-btn" id="modeWebcamBtn" role="tab" aria-selected="false">Webcam</button>
+    </div>
+
+    <div class="mode-panel" id="imageMode">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload or drop an image of a dance pose">
+        <span class="corner tl" aria-hidden="true"></span>
+        <span class="corner tr" aria-hidden="true"></span>
+        <span class="corner bl" aria-hidden="true"></span>
+        <span class="corner br" aria-hidden="true"></span>
+
+        <div class="dropzone-empty" id="dropzoneEmpty">
+          <svg class="mudra-icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 8 C 20 8 14 20 14 30 C 14 44 22 54 32 58 C 42 54 50 44 50 30 C 50 20 44 8 32 8 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="32" cy="28" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <p class="dz-text"><strong>Drop a pose</strong> here, or click to browse</p>
+          <p class="dz-sub">JPG or PNG &middot; a single dancer, clearly lit</p>
+        </div>
+
+        <div class="dropzone-filled" id="dropzoneFilled" hidden>
+          <img id="preview" alt="Selected pose preview">
+          <button type="button" class="ghost-btn" id="changeImageBtn">Choose a different image</button>
+        </div>
+
+        <input type="file" id="imageInput" accept="image/*" hidden>
+      </div>
+
+      <button class="primary-btn" id="predictBtn" disabled>
+        <span class="btn-label">Read the Bh&#257;va</span>
+        <span class="btn-spinner" id="btnSpinnerImg" hidden></span>
+      </button>
+    </div>
+
+    <div class="mode-panel" id="webcamMode" hidden>
+      <div class="webcam-frame">
+        <span class="corner tl" aria-hidden="true"></span>
+        <span class="corner tr" aria-hidden="true"></span>
+        <span class="corner bl" aria-hidden="true"></span>
+        <span class="corner br" aria-hidden="true"></span>
+        <video id="webcamVideo" autoplay playsinline muted></video>
+        <canvas id="webcamCanvas" hidden></canvas>
+        <p class="dz-sub" id="webcamStatus">Camera off</p>
+      </div>
+
+      <button class="primary-btn" id="startCameraBtn">
+        <span class="btn-label">Start camera</span>
+      </button>
+
+      <button class="primary-btn" id="captureBtn" disabled hidden>
+        <span class="btn-label">Capture &amp; read</span>
+        <span class="btn-spinner" id="btnSpinnerCam" hidden></span>
+      </button>
+
+      <label class="live-toggle">
+        <input type="checkbox" id="liveToggle" disabled>
+        Live detection &middot; reads every 2.5s
+      </label>
+    </div>
+
+    <p class="error-msg" id="errorMsg" role="alert" hidden></p>
+  </section>
+
+  <!-- RIGHT: Result -->
+  <section class="panel result-panel" aria-labelledby="result-heading">
+    <h2 id="result-heading" class="panel-title">Rasa Ma&#7751;&#7693;ala</h2>
+
+    <div class="result-banner" id="resultBanner" hidden>
+      <span class="result-tag">Emotion detected</span>
+      <span class="result-name" id="resultName">&mdash;</span>
+    </div>
+
+    <div class="mandala-wrap">
+      <svg id="mandalaSvg" viewBox="0 0 300 300" aria-hidden="true"></svg>
+      <div class="mandala-center">
+        <span class="center-label" id="centerLabel">&mdash;</span>
+        <span class="center-sub" id="centerSub">awaiting image</span>
+      </div>
+    </div>
+
+    <div class="confidence-block" id="confidenceBlock" hidden>
+      <div class="confidence-row">
+        <span class="confidence-tag">Confidence</span>
+        <span class="confidence-value" id="confidenceValue">0%</span>
+      </div>
+      <div class="confidence-track">
+        <div class="confidence-fill" id="confidenceFill"></div>
+      </div>
+    </div>
+
+    <ul class="legend" id="legend" aria-label="The nine rasas"></ul>
+  </section>
+
+</main>
+
+<section class="history-section" aria-labelledby="history-heading">
+  <div class="history-head">
+    <h2 id="history-heading" class="panel-title">Past readings</h2>
+    <button class="text-btn" id="clearHistoryBtn">Clear history</button>
+  </div>
+  <div class="history-strip" id="historyStrip">
+    <p class="history-empty" id="historyEmpty">Your readings will appear here, like notes on a palm-leaf manuscript.</p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <p>Navarasa reference: V&#299;ra &middot; Karu&#7751;&#257; &middot; Raudra &middot; H&#257;sya &middot; &#346;&#257;nta &middot; &#346;&#7771;ng&#257;ra &middot; Bhay&#257;naka &middot; Adbhuta &middot; B&#299;bhatsa</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
